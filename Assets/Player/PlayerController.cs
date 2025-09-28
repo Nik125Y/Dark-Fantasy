@@ -69,34 +69,38 @@ public class PlayerController : MonoBehaviour
         // Ground check
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
 
-        // Wall check (circle at wallCheck position)
+        // Wall check
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, 0.1f, wallLayer);
 
-        // Handle wall slide
-        if (isTouchingWall && !isGrounded && moveInput != 0 && !isWallJumping)
+        // Wall slide logic
+        if (isTouchingWall && !isGrounded && moveInput != 0)
         {
             isWallSliding = true;
+            animator.SetBool("isWallSliding", true);
+
+            // Limit fall speed while sliding
+            if (rb.linearVelocity.y < -wallSlideSpeed)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -wallSlideSpeed);
+            }
         }
         else
         {
             isWallSliding = false;
-        }
-
-        // Limit vertical velocity while sliding
-        if (isWallSliding && rb.linearVelocity.y < -wallSlideSpeed)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -wallSlideSpeed);
-            Debug.Log("[Player] Wall sliding");
-        }
-
-        // Stop wall jump after duration
-        if (isWallJumping && Time.time > wallJumpTimer)
-        {
-            isWallJumping = false;
+            animator.SetBool("isWallSliding", false);
         }
 
         // Animator update
+
+        // Horizontal movement
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
+
+        // Grounded state
+        animator.SetBool("isGrounded", isGrounded);
+
+        // Vertical velocity 
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
+
         animator.SetBool("isWallSliding", isWallSliding);
     }
 
