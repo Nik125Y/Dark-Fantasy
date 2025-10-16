@@ -12,9 +12,9 @@ TagManager:
   - Ground
   - Water
   - UI
-  - OnGround
-  - wallLayer
-  - 
+  - Hazard
+  - Wall
+  - Platform
   - 
   - 
   - 
