@@ -43,13 +43,13 @@ public class HeroController : MonoBehaviour
         controls.Player.Jump.started += _ =>
         {
             jumpPressed = true;
-            Debug.Log("Jump pressed");
+            //Debug.Log("Jump pressed");
         };
         controls.Player.Jump.canceled += _ => jumpPressed = false;
 
         controls.Player.Down.performed += _ =>
         {
-            Debug.Log("Down pressed");
+            //Debug.Log("Down pressed");
             TryFallThroughPlatform();
         };
     }
@@ -64,7 +64,7 @@ public class HeroController : MonoBehaviour
         isOnPlatform = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayer);
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, wallLayer);
 
-        Debug.Log($"Ground: {isGrounded}, Platform: {isOnPlatform}, Wall: {isTouchingWall}");
+        //Debug.Log($"Ground: {isGrounded}, Platform: {isOnPlatform}, Wall: {isTouchingWall}");
 
         // --- Wall Slide ---
         bool isPushingAgainstWall =
@@ -74,10 +74,10 @@ public class HeroController : MonoBehaviour
         bool wasWallSliding = isWallSliding;
         isWallSliding = !isGrounded && rb.linearVelocity.y < 0f && isPushingAgainstWall;
 
-        if (isWallSliding && !wasWallSliding)
-            Debug.Log("WallSlide started");
-        else if (!isWallSliding && wasWallSliding)
-            Debug.Log("WallSlide ended");
+        //if (isWallSliding && !wasWallSliding)
+            //Debug.Log("WallSlide started");
+        //else if (!isWallSliding && wasWallSliding)
+            //Debug.Log("WallSlide ended");
 
         // --- Jump ---
         if (jumpPressed)
@@ -118,7 +118,7 @@ public class HeroController : MonoBehaviour
         rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
         animator.SetTrigger("jump");
         jumpPressed = false;
-        Debug.Log("Jump executed");
+        //Debug.Log("Jump executed");
     }
 
     private void WallJump()
@@ -129,7 +129,7 @@ public class HeroController : MonoBehaviour
         isWallSliding = false;
         animator.SetTrigger("jump");
         jumpPressed = false;
-        Debug.Log("WallJump executed");
+        //Debug.Log("WallJump executed");
     }
 
     private void TryFallThroughPlatform()
@@ -150,7 +150,7 @@ public class HeroController : MonoBehaviour
         if (platform != null)
         {
             Physics2D.IgnoreCollision(playerCol, platform, true);
-            Debug.Log("Ignoring collision with platform");
+            //Debug.Log("Ignoring collision with platform");
         }
 
         yield return new WaitForSeconds(0.4f);
@@ -158,7 +158,7 @@ public class HeroController : MonoBehaviour
         if (platform != null)
         {
             Physics2D.IgnoreCollision(playerCol, platform, false);
-            Debug.Log("Restored collision with platform");
+            //Debug.Log("Restored collision with platform");
         }
 
         isFallingThroughPlatform = false;

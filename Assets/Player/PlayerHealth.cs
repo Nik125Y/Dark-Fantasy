@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
         UpdateHearts();
     }
 
-    private void UpdateHearts()
+    public void UpdateHearts()
     {
         for (int i = 0; i < hearts.Length; i++)
         {
@@ -129,10 +129,10 @@ public class PlayerHealth : MonoBehaviour
 
         if (RespawnManager.Instance != null)
         {
-            StartCoroutine(RespawnManager.Instance.RespawnPlayer());
+            RespawnManager.Instance.StartCoroutine(RespawnManager.Instance.RespawnPlayer());
         }
     }
-   
+
 
     private void OnTriggerEnter2D (Collider2D other)
     {

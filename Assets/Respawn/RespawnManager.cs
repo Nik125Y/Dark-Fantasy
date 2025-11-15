@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using System.Diagnostics;
+using UnityEngine;
 
 public class RespawnManager : MonoBehaviour
 {
@@ -46,23 +47,41 @@ public class RespawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(respawnDelay);
 
-        // re-enable player
+        // Reset position BEFORE activation
         currentPlayer.transform.position = spawnPoint.position;
-        currentPlayer.SetActive(true);
+        var bc = currentPlayer.GetComponent<BoxCollider2D>();
+        if (bc != null) bc.enabled = true;
 
-        // restore movement and physics
+        // Reset physics BEFORE enabling player
         var rb = currentPlayer.GetComponent<Rigidbody2D>();
-        var hero = currentPlayer.GetComponent<HeroController>();
-        var health = currentPlayer.GetComponent<PlayerHealth>();
-
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.simulated = true;
         rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        
+
+        // Restore gameplay components
+        var hero = currentPlayer.GetComponent<HeroController>();
+        var health = currentPlayer.GetComponent<PlayerHealth>();
+
         hero.enabled = true;
+        
         health.currentHealth = health.maxHealth;
         health.UpdateHearts();
+        health.enabled = true;
 
-        // small fade-in effect (optional)
+        // Optional: reset animator state
+        var anim = currentPlayer.GetComponent<Animator>();
+        anim.Rebind();
+        anim.Update(0f);
+
+        // Now enable player
+        currentPlayer.SetActive(true);
+
+        // Ensure player is fully visible
         currentPlayer.GetComponent<SpriteRenderer>().color = Color.white;
+
     }
+
 }
